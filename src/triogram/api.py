@@ -3,10 +3,7 @@ from .errors import ApiError
 
 class Api:
 
-    def __init__(self, access_token, version, session, throttler,
-                 request_wrapper=None):
-        self._access_token = access_token
-        self._version = version
+    def __init__(self, session, throttler, request_wrapper=None):
         self._session = session
         self._throttler = throttler
         self._request_wrapper = request_wrapper
