@@ -1,15 +1,16 @@
-from contextlib import asynccontextmanager
+import contextlib
 
+import attr
 import trio
 
 from .utils import aclosed
 
 
+@attr.s
 class Dispatcher:
 
-    def __init__(self):
-        self._lock = trio.Lock()
-        self._send_channels = set()
+    _lock = attr.ib(factory=trio.Lock)
+    _send_channels = attr.ib(factory=set)
 
     async def pub(self, update):
         async with self._lock:
@@ -34,7 +35,7 @@ class Dispatcher:
     def has_subs(self):
         return len(self._send_channels) != 0
 
-    @asynccontextmanager
+    @contextlib.asynccontextmanager
     async def _open_channel(self):
         send_channel, recv_channel = trio.open_memory_channel(0)
 

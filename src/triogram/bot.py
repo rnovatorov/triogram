@@ -1,9 +1,12 @@
+import attr
+
+
+@attr.s
 class Bot:
 
-    def __init__(self, api, poller, dispatcher):
-        self._api = api
-        self._poller = poller
-        self._dispatcher = dispatcher
+    _api = attr.ib()
+    _poller = attr.ib()
+    _dispatcher = attr.ib()
 
     async def run(self):
         async with self._poller() as updates:
