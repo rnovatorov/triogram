@@ -3,7 +3,7 @@ from .utils import aclosed
 
 class Poller:
 
-    def __init__(self, api, offset=None, timeout=3):
+    def __init__(self, api, offset=None, timeout=25):
         self.api = api
         self.offset = offset
         self.timeout = timeout
