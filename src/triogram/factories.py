@@ -20,7 +20,7 @@ def make_bot(token):
 def make_session(
     token,
     base_location='https://api.telegram.org',
-    connections=1,
+    connections=2,
     **kwargs
 ):
     return asks.Session(
