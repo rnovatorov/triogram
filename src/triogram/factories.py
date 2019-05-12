@@ -18,14 +18,14 @@ def make_bot(token):
 
 
 def make_session(
-    base_location='https://api.vk.com',
-    endpoint='/method',
+    token,
+    base_location='https://api.telegram.org',
     connections=1,
     **kwargs
 ):
     return asks.Session(
         base_location=base_location,
-        endpoint=endpoint,
+        endpoint=f'/bot{token}',
         connections=connections,
         **kwargs
     )
