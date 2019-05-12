@@ -65,8 +65,8 @@ def make_request_wrapper(
     )
 
 
-def make_poller(api, **kwargs):
-    return Poller(api=api, **kwargs)
+def make_poller(api):
+    return Poller(api=api)
 
 
 def make_dispatcher():
