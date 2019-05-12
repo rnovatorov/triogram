@@ -1,2 +1,4 @@
-class ApiError(Exception):
-    """API error occurred."""
+class ApiError(RuntimeError):
+    """
+    API error occurred.
+    """
