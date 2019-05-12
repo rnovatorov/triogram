@@ -6,9 +6,9 @@ class Bot:
         self._dispatcher = dispatcher
 
     async def run(self):
-        async with self._poller() as events:
-            async for event in events:
-                await self.pub(event)
+        async with self._poller() as updates:
+            async for update in updates:
+                await self.pub(update)
 
     __call__ = run
 

@@ -11,24 +11,24 @@ class Dispatcher:
         self._lock = trio.Lock()
         self._send_channels = set()
 
-    async def pub(self, event):
+    async def pub(self, update):
         async with self._lock:
             for send_channel in self._send_channels:
-                await send_channel.send(event)
+                await send_channel.send(update)
 
     @aclosed
     async def sub(self, predicate, task_status=trio.TASK_STATUS_IGNORED):
         async with self._open_channel() as recv_channel:
             task_status.started()
 
-            async for event in recv_channel:
-                if predicate(event):
-                    yield event
+            async for update in recv_channel:
+                if predicate(update):
+                    yield update
 
     async def wait(self, predicate, **kwargs):
-        async with self.sub(predicate, **kwargs) as events:
-            async for event in events:
-                return event
+        async with self.sub(predicate, **kwargs) as updates:
+            async for update in updates:
+                return update
 
     @property
     def has_subs(self):
