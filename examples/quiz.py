@@ -39,7 +39,7 @@ class Quiz:
         return questions
 
     async def send(self, text):
-        await self.bot.api.sendMessage(params={
+        await self.bot.api.send_message(params={
             'chat_id': self.player,
             'text': text
         })

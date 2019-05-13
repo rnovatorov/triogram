@@ -19,6 +19,6 @@ class Api:
 
     def __getattr__(self, method_name):
         async def method(**kwargs):
-            return await self(method_name, **kwargs)
+            return await self(method_name.replace('_', ''), **kwargs)
 
         return method
