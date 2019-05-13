@@ -10,3 +10,4 @@ triogram = {editable = true, path = "."}
 pytest = "*"
 pytest-cov = "*"
 pytest-trio = "*"
+flask = "*"
