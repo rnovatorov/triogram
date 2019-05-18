@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/rnovatorov/triogram.svg?branch=master)](https://travis-ci.com/rnovatorov/triogram)
-[![codecov](https://codecov.io/gh/rnovatorov/triogram/branch/master/graph/badge.svg)](https://codecov.io/gh/rnovatorov/triogram)
+[![Code Coverage](https://codecov.io/gh/rnovatorov/triogram/branch/master/graph/badge.svg)](https://codecov.io/gh/rnovatorov/triogram)
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 
 # Triogram
 
