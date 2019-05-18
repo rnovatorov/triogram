@@ -7,7 +7,9 @@ verify_ssl = true
 triogram = {editable = true, path = "."}
 
 [dev-packages]
+black = "*"
 pytest = "*"
-pytest-cov = "*"
 pytest-trio = "*"
+pytest-cov = "*"
+codecov = "*"
 flask = "*"
