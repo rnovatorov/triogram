@@ -6,6 +6,9 @@ import triogram
 
 
 def configure_logging():
+    """
+    Configures `triogram` to log API requests and responses.
+    """
     logger = logging.getLogger("triogram")
     logger.setLevel(logging.INFO)
 
