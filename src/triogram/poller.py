@@ -16,12 +16,11 @@ class Poller:
             updates = await self._get_updates()
             for update in updates:
                 yield update
-                self._offset = update['update_id'] + 1
+                self._offset = update["update_id"] + 1
 
     __call__ = poll
 
     async def _get_updates(self):
-        return await self._api.get_updates(json={
-            'offset': self._offset,
-            'timeout': self._timeout
-        })
+        return await self._api.get_updates(
+            json={"offset": self._offset, "timeout": self._timeout}
+        )

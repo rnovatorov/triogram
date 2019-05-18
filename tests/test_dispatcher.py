@@ -6,10 +6,7 @@ import pytest
 from triogram.dispatcher import Dispatcher
 
 
-TEST_EVENT = {
-    'type': 'test_type',
-    'object': 'test_object'
-}
+TEST_EVENT = {"type": "test_type", "object": "test_object"}
 
 
 @pytest.fixture()

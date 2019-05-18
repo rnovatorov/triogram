@@ -6,13 +6,13 @@ import triogram
 
 
 def configure_logging():
-    logger = logging.getLogger('triogram')
+    logger = logging.getLogger("triogram")
     logger.setLevel(logging.INFO)
 
     handler = logging.StreamHandler()
     handler.setLevel(logging.INFO)
 
-    formatter = logging.Formatter('%(request_id)s %(message)s')
+    formatter = logging.Formatter("%(request_id)s %(message)s")
     handler.setFormatter(formatter)
 
     logger.addHandler(handler)
@@ -32,7 +32,7 @@ async def main():
     Starts the bot and event handlers.
     """
     configure_logging()
-    token = os.environ['TOKEN']
+    token = os.environ["TOKEN"]
     bot = triogram.make_bot(token)
 
     async with trio.open_nursery() as nursery:
@@ -40,5 +40,5 @@ async def main():
         nursery.start_soon(get_me, bot)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     trio.run(main)
