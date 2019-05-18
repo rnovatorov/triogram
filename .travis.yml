@@ -5,6 +5,9 @@ dist: xenial
 python:
   - "3.7"
 
+env:
+  - PIPENV_VERBOSITY=-1
+
 install:
   - pip install pipenv
   - pipenv update --dev --pre
