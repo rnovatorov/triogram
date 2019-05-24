@@ -1,5 +1,18 @@
 import attr
 
+from .api import Api
+from .dispatcher import Dispatcher
+from .poller import Poller
+from .session import make_session
+
+
+def make_bot(token):
+    session = make_session(token=token)
+    api = Api(session=session)
+    poller = Poller(api=api)
+    dispatcher = Dispatcher()
+    return Bot(api=api, poller=poller, dispatcher=dispatcher)
+
 
 @attr.s
 class Bot:

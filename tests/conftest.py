@@ -5,8 +5,8 @@ import pytest
 import flask
 from werkzeug import serving
 
-from triogram.factories import make_session
 from triogram.api import Api
+from triogram.session import make_session
 
 
 server_ready = trio.Event()
