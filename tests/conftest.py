@@ -30,16 +30,15 @@ async def fixture_api(nursery):
 
     @app.route(f"/bot{token}/<name>", methods=["POST"])
     def method(name):
-        json = flask.request.get_json()
+        params = flask.request.args
+        ok = "_error" not in params
+
         return flask.jsonify(
             {
-                "ok": json["_ok"],
+                "ok": ok,
                 "result"
-                if json["_ok"]
-                else "description": {
-                    "method_name": name,
-                    "json": flask.request.get_json(),
-                },
+                if ok
+                else "description": {"method_name": name, "params": params},
             }
         )
 
