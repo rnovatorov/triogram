@@ -22,5 +22,5 @@ class Poller:
 
     async def _get_updates(self):
         return await self._api.get_updates(
-            json={"offset": self._offset, "timeout": self._timeout}
+            params={"offset": self._offset, "timeout": self._timeout}
         )

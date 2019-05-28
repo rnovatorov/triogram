@@ -15,7 +15,7 @@ async def echo(bot):
     async with bot.sub(new_message) as updates:
         async for update in updates:
             await bot.api.send_message(
-                json={
+                params={
                     "chat_id": update["message"]["from"]["id"],
                     "text": update["message"]["text"],
                 }
@@ -28,7 +28,7 @@ async def echo_once(bot):
     """
     update = await bot.wait(new_message)
     await bot.api.send_message(
-        json={
+        params={
             "chat_id": update["message"]["from"]["id"],
             "text": update["message"]["text"],
         }
