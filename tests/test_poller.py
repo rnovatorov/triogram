@@ -1,9 +1,12 @@
+import attr
+
 from triogram.poller import Poller
 
 
+@attr.s
 class MockApi:
-    def __init__(self, updates):
-        self._updates = iter(updates)
+
+    _updates = attr.ib()
 
     async def get_updates(self, *_, **__):
         return next(self._updates)
@@ -11,23 +14,33 @@ class MockApi:
 
 async def test_sanity():
     api = MockApi(
-        updates=[
-            [{"update_id": 0, "message": "A"}],
-            [{"update_id": 1, "message": "B"}, {"update_id": 2, "message": "B"}],
-            [{"update_id": 3, "message": "C"}],
-        ]
+        iter(
+            [
+                [{"update_id": 0, "message": "A"}],
+                [{"update_id": 1, "message": "B"}, {"update_id": 2, "message": "B"}],
+                [],
+                [{"update_id": 3, "message": "C"}],
+            ]
+        )
     )
     poller = Poller(api=api)
 
-    async with poller() as updates:
-        assert (await updates.__anext__())["message"] == "A"
-        assert poller._offset is None
+    updates = await poller.get_updates()
+    assert len(updates) == 1
+    assert updates[0]["message"] == "A"
+    assert poller._offset == 1
 
-        assert (await updates.__anext__())["message"] == "B"
-        assert poller._offset == 1
+    updates = await poller.get_updates()
+    assert len(updates) == 2
+    assert updates[0]["message"] == "B"
+    assert updates[1]["message"] == "B"
+    assert poller._offset == 3
 
-        assert (await updates.__anext__())["message"] == "B"
-        assert poller._offset == 2
+    updates = await poller.get_updates()
+    assert len(updates) == 0
+    assert poller._offset == 3
 
-        assert (await updates.__anext__())["message"] == "C"
-        assert poller._offset == 3
+    updates = await poller.get_updates()
+    assert len(updates) == 1
+    assert updates[0]["message"] == "C"
+    assert poller._offset == 4

@@ -1,6 +1,7 @@
+from unittest import mock
+
 import trio
 
-from triogram.utils import aclosed
 from triogram.bot import Bot, make_bot
 from triogram.dispatcher import Dispatcher
 
@@ -12,26 +13,19 @@ async def test_make_bot():
 
 
 async def test_bot():
-    api = object()
+    async def get_updates():
+        return [42]
+
+    poller = mock.Mock(get_updates=get_updates)
     dispatcher = Dispatcher()
-
-    @aclosed
-    async def poller():
-        yield 42
-
-    bot = Bot(api=api, poller=poller, dispatcher=dispatcher)
-
-    assert bot.__call__ == bot.run
-    assert bot.api == api
-    assert bot.pub == dispatcher.pub
-    assert bot.sub == dispatcher.sub
-    assert bot.wait == dispatcher.wait
-
-    async def subscriber(**kwargs):
-        event = await bot.wait(lambda _: True, **kwargs)
-        assert event == 42
-        nursery.cancel_scope.cancel()
+    bot = Bot(api=None, poller=poller, dispatcher=dispatcher)
 
     async with trio.open_nursery() as nursery:
-        await nursery.start(subscriber)
         nursery.start_soon(bot)
+
+        async def subscriber(**kwargs):
+            async with bot.sub(lambda _: True, **kwargs) as updates:
+                assert await updates.receive() == 42
+            nursery.cancel_scope.cancel()
+
+        await nursery.start(subscriber)

@@ -22,8 +22,8 @@ class Bot:
     _dispatcher = attr.ib()
 
     async def run(self):
-        async with self._poller() as updates:
-            async for update in updates:
+        while True:
+            for update in await self._poller.get_updates():
                 await self.pub(update)
 
     __call__ = run
