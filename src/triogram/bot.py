@@ -17,7 +17,7 @@ def make_bot(token):
 @attr.s
 class Bot:
 
-    _api = attr.ib()
+    api = attr.ib()
     _poller = attr.ib()
     _dispatcher = attr.ib()
 
@@ -27,10 +27,6 @@ class Bot:
                 await self.pub(update)
 
     __call__ = run
-
-    @property
-    def api(self):
-        return self._api
 
     @property
     def pub(self):
