@@ -11,13 +11,10 @@ class Dispatcher:
     _send_channels = attr.ib(factory=dict)
 
     async def pub(self, update):
-        async with self._lock:
+        async with self._lock, trio.open_nursery() as nursery:
             for send_channel, predicate in self._send_channels.items():
                 if predicate(update):
-                    try:
-                        send_channel.send_nowait(update)
-                    except trio.WouldBlock:
-                        pass
+                    nursery.start_soon(send_channel.send, update)
 
     @contextlib.asynccontextmanager
     async def sub(self, predicate, task_status=trio.TASK_STATUS_IGNORED):
