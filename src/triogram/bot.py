@@ -40,6 +40,6 @@ class Bot:
     def sub(self):
         return self._dispatcher.sub
 
-    @property
-    def wait(self):
-        return self._dispatcher.wait
+    async def wait(self, *args, **kwargs):
+        async with self.sub(*args, **kwargs) as updates:
+            return await updates.receive()
