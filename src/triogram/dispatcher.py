@@ -17,8 +17,8 @@ class Dispatcher:
                     nursery.start_soon(send_channel.send, update)
 
     @contextlib.asynccontextmanager
-    async def sub(self, predicate, task_status=trio.TASK_STATUS_IGNORED):
-        async with self._open_channel(predicate) as recv_channel:
+    async def sub(self, predicate, buffer=0, task_status=trio.TASK_STATUS_IGNORED):
+        async with self._open_channel(predicate, buffer) as recv_channel:
             task_status.started()
             yield recv_channel
 
@@ -27,8 +27,8 @@ class Dispatcher:
         return len(self._send_channels) != 0
 
     @contextlib.asynccontextmanager
-    async def _open_channel(self, predicate):
-        send_channel, recv_channel = trio.open_memory_channel(0)
+    async def _open_channel(self, predicate, buffer):
+        send_channel, recv_channel = trio.open_memory_channel(buffer)
 
         async with send_channel, recv_channel:
             async with self._lock:

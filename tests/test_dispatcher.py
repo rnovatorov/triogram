@@ -52,6 +52,28 @@ async def test_multiple_subscribers(dispatcher, autojump_clock):
     assert predicate.call_count == n_subscribers
 
 
+async def test_buffering(dispatcher, autojump_clock):
+    predicate = mock.Mock()
+
+    async def subscriber(**kwargs):
+        async with dispatcher.sub(predicate, buffer=1, **kwargs) as updates:
+            await trio.sleep(3)
+            assert await updates.receive() == TEST_UPDATE
+
+    async with trio.open_nursery() as nursery:
+        await nursery.start(subscriber)
+        assert dispatcher.has_subs
+
+        with trio.fail_after(1):
+            await dispatcher.pub(TEST_UPDATE)
+
+        with trio.move_on_after(1):
+            await dispatcher.pub(TEST_UPDATE)
+            pytest.fail()
+
+    assert not dispatcher.has_subs
+
+
 async def test_sub_cancellation(dispatcher, autojump_clock):
     predicate = lambda _: False
     timeout = 4
