@@ -10,13 +10,13 @@ env:
 
 install:
   - pip install pipenv
-  - pipenv update --dev --pre
+  - make deps/install
 
 before_script:
-  - pipenv run black --check .
+  - make black/check
 
 script:
-  - pipenv run pytest --verbose --cov
+  - make test
 
 after_success:
-  - pipenv run codecov
+  - make codecov
