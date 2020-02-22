@@ -22,7 +22,7 @@ class Api:
         self._set_request_id()
 
         logger.info("> %s %s", method_name, kwargs)
-        response = await self._http.post(f"/{method_name}", **kwargs)
+        response = await self._http.post(method_name, **kwargs)
         payload = response.json()
 
         if payload["ok"]:
