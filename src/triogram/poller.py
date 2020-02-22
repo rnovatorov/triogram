@@ -1,12 +1,14 @@
 import attr
 
+from .config import POLLER_TIMEOUT
+
 
 @attr.s
 class Poller:
 
     _api = attr.ib()
     _offset = attr.ib(default=None)
-    _timeout = attr.ib(default=25)
+    _timeout = attr.ib(default=POLLER_TIMEOUT)
 
     async def get_updates(self):
         updates = await self._api.get_updates(
