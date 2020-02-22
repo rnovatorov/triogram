@@ -3,12 +3,12 @@ import attr
 from .api import Api
 from .dispatcher import Dispatcher
 from .poller import Poller
-from .session import make_session
+from .http import http_client
 
 
 def make_bot(token):
-    session = make_session(token=token)
-    api = Api(session=session)
+    http = http_client(token=token)
+    api = Api(http=http)
     poller = Poller(api=api)
     dispatcher = Dispatcher()
     return Bot(api=api, poller=poller, dispatcher=dispatcher)

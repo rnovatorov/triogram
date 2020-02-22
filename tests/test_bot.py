@@ -9,7 +9,7 @@ from triogram.dispatcher import Dispatcher
 async def test_make_bot():
     token = "123:ABC"
     bot = make_bot(token)
-    assert bot.api._session.endpoint == f"/bot{token}"
+    assert bot.api._http.endpoint == f"/bot{token}"
 
 
 async def test_bot():

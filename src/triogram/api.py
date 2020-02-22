@@ -19,7 +19,7 @@ def make_logger():
 @attr.s
 class Api:
 
-    _session = attr.ib()
+    _http = attr.ib()
     _request_counter = attr.ib(factory=itertools.count)
     _logger = attr.ib(factory=make_logger)
 
@@ -27,7 +27,7 @@ class Api:
         self._set_request_id()
 
         self._logger.info("> %s %s", method_name, kwargs)
-        response = await self._session.post(path=f"/{method_name}", **kwargs)
+        response = await self._http.post(path=f"/{method_name}", **kwargs)
         payload = response.json()
 
         if payload["ok"]:

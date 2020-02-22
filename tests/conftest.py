@@ -7,7 +7,7 @@ import trio
 import pytest
 
 from triogram.api import Api
-from triogram.session import make_session
+from triogram.http import http_client
 
 
 class Server(server.HTTPServer):
@@ -50,5 +50,5 @@ async def fixture_api(nursery):
     )
     await httpd.ready.wait()
     host, port = httpd.server_address
-    session = make_session("123:ABC", f"http://{host}:{port}")
-    yield Api(session)
+    http = http_client("123:ABC", f"http://{host}:{port}")
+    yield Api(http)
