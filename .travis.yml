@@ -10,10 +10,10 @@ env:
 
 install:
   - pip install pipenv
-  - make deps/install
+  - make deps-install
 
 before_script:
-  - make black/check
+  - make black-check
 
 script:
   - make test
