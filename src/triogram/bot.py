@@ -11,18 +11,19 @@ def make_bot(token):
     api = Api(http=http)
     poller = Poller(api=api)
     dispatcher = Dispatcher()
-    return Bot(api=api, poller=poller, dispatcher=dispatcher)
+    return Bot(http=http, api=api, poller=poller, dispatcher=dispatcher)
 
 
 @attr.s
 class Bot:
 
+    _http = attr.ib()
     api = attr.ib()
     _poller = attr.ib()
     _dispatcher = attr.ib()
 
     async def run(self):
-        async with self.api:
+        async with self._http:
             while True:
                 for update in await self._poller.get_updates():
                     await self.pub(update)

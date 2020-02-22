@@ -17,10 +17,11 @@ async def test_bot():
     async def get_updates():
         return [42]
 
-    api = contextlib.AsyncExitStack()
+    http = contextlib.AsyncExitStack()
+    api = None
     poller = mock.Mock(get_updates=get_updates)
     dispatcher = Dispatcher()
-    bot = Bot(api=api, poller=poller, dispatcher=dispatcher)
+    bot = Bot(http=http, api=api, poller=poller, dispatcher=dispatcher)
 
     async with trio.open_nursery() as nursery:
         nursery.start_soon(bot)

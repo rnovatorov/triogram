@@ -18,12 +18,6 @@ class Api:
     _http = attr.ib()
     _request_counter = attr.ib(factory=itertools.count)
 
-    async def __aenter__(self):
-        return self
-
-    async def __aexit__(self, *exc):
-        await self._http.aclose()
-
     async def __call__(self, method_name, **kwargs):
         self._set_request_id()
 
