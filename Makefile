@@ -24,7 +24,7 @@ codecov:
 
 .PHONY: upload
 upload: dist
-	twine upload $</*
+	pipenv run twine upload $</*
 
 dist: setup.py
 	pipenv run python $< bdist_wheel
