@@ -9,11 +9,7 @@ from .logs import ContextVarAdapter
 
 
 request_id = contextvars.ContextVar("request_id")
-
-
-def make_logger():
-    logger = logging.getLogger(__name__)
-    return ContextVarAdapter(logger, request_id)
+logger = ContextVarAdapter(logging.getLogger(__name__), request_id)
 
 
 @attr.s
@@ -21,7 +17,6 @@ class Api:
 
     _http = attr.ib()
     _request_counter = attr.ib(factory=itertools.count)
-    _logger = attr.ib(factory=make_logger)
 
     async def __aenter__(self):
         return self
@@ -32,15 +27,15 @@ class Api:
     async def __call__(self, method_name, **kwargs):
         self._set_request_id()
 
-        self._logger.info("> %s %s", method_name, kwargs)
+        logger.info("> %s %s", method_name, kwargs)
         response = await self._http.post(f"/{method_name}", **kwargs)
         payload = response.json()
 
         if payload["ok"]:
-            self._logger.info("< %s", payload)
+            logger.info("< %s", payload)
             return payload["result"]
 
-        self._logger.error("< %s", payload)
+        logger.error("< %s", payload)
         raise ApiError(payload["description"])
 
     def __getattr__(self, method_name):
