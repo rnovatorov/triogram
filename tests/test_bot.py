@@ -1,3 +1,4 @@
+import contextlib
 from unittest import mock
 
 import trio
@@ -16,9 +17,10 @@ async def test_bot():
     async def get_updates():
         return [42]
 
+    api = contextlib.AsyncExitStack()
     poller = mock.Mock(get_updates=get_updates)
     dispatcher = Dispatcher()
-    bot = Bot(api=None, poller=poller, dispatcher=dispatcher)
+    bot = Bot(api=api, poller=poller, dispatcher=dispatcher)
 
     async with trio.open_nursery() as nursery:
         nursery.start_soon(bot)
