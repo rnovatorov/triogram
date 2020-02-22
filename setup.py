@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="triogram",
-    version="0.1.5",
+    version="0.2.0",
     description="Async Telegram Bot API built with httpx and trio",
     packages=find_packages("src"),
     package_dir={"": "src"},
