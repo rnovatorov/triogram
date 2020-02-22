@@ -5,7 +5,7 @@
 # Triogram
 
 Async Telegram Bot API built with
-[asks](https://github.com/theelous3/asks)
+[httpx](https://github.com/encode/httpx)
 and
 [trio](https://github.com/python-trio/trio).
 

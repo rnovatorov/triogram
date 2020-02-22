@@ -1,7 +1,5 @@
-import asks
+import httpx
 
 
-def http_client(token, base_location="https://api.telegram.org", connections=2):
-    return asks.Session(
-        base_location=base_location, endpoint=f"/bot{token}", connections=connections
-    )
+def http_client(token, base_url="https://api.telegram.org"):
+    return httpx.AsyncClient(base_url=f"{base_url}/bot{token}")
