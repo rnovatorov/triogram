@@ -18,10 +18,11 @@ async def send_file(bot):
     """
     async with bot.sub(new_message) as updates:
         async for update in updates:
-            await bot.api.send_document(
-                params={"chat_id": update["message"]["chat"]["id"]},
-                files={"document": __file__},
-            )
+            with open(__file__) as file:
+                await bot.api.send_document(
+                    params={"chat_id": update["message"]["chat"]["id"]},
+                    files={"document": file},
+                )
 
 
 async def main():
