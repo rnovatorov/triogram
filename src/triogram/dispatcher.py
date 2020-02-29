@@ -13,11 +13,11 @@ class Dispatcher:
     async def pub(self, update):
         async with self._lock, trio.open_nursery() as nursery:
             for send_channel, predicate in self._send_channels.items():
-                if predicate(update):
+                if predicate is None or predicate(update):
                     nursery.start_soon(send_channel.send, update)
 
     @contextlib.asynccontextmanager
-    async def sub(self, predicate, buffer=0, task_status=trio.TASK_STATUS_IGNORED):
+    async def sub(self, predicate=None, buffer=0, task_status=trio.TASK_STATUS_IGNORED):
         async with self._open_channel(predicate, buffer) as recv_channel:
             task_status.started()
             yield recv_channel

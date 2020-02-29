@@ -112,3 +112,23 @@ async def test_blocking_subscriber(dispatcher, autojump_clock):
         await dispatcher.pub(TEST_UPDATE)
 
     assert not dispatcher.has_subs
+
+
+async def test_no_predicate(dispatcher, autojump_clock):
+    predicate = mock.Mock()
+
+    async def subscriber_with_predicate(**kwargs):
+        async with dispatcher.sub(predicate, **kwargs) as updates:
+            assert await updates.receive() == TEST_UPDATE
+
+    async def subscriber_without_predicate(**kwargs):
+        async with dispatcher.sub(**kwargs) as updates:
+            assert await updates.receive() == TEST_UPDATE
+
+    async with trio.open_nursery() as nursery:
+        await nursery.start(subscriber_with_predicate)
+        await nursery.start(subscriber_without_predicate)
+        await dispatcher.pub(TEST_UPDATE)
+
+    assert not dispatcher.has_subs
+    assert predicate.call_count == 1

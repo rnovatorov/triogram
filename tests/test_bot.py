@@ -27,7 +27,7 @@ async def test_bot():
         nursery.start_soon(bot)
 
         async def subscriber(**kwargs):
-            async with bot.sub(lambda _: True, **kwargs) as updates:
+            async with bot.sub(**kwargs) as updates:
                 assert await updates.receive() == 42
             nursery.cancel_scope.cancel()
 
