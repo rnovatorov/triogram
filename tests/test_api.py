@@ -1,22 +1,24 @@
 import pytest
 
-from triogram.errors import ApiError
+from triogram.errors import ApiError, AuthError
 
 
-async def test_api(api):
-    # Response OK
+async def test_response_ok(make_api):
+    api = make_api()
     response = await api.get_chat_member(params={"chat_id": "@foo", "user_id": 42})
     assert response["method"] == "getchatmember"
     assert response["params"]["chat_id"] == "@foo"
     assert response["params"]["user_id"] == "42"
 
-    # Response error
-    try:
+
+async def test_response_error(make_api):
+    api = make_api()
+    with pytest.raises(ApiError) as exc:
         await api.send_message(params={"error": True, "chat_id": 43, "text": "bar"})
-    except ApiError as exc:
-        response = exc.args[0]
-        assert response["method"] == "sendmessage"
-        assert response["params"]["chat_id"] == "43"
-        assert response["params"]["text"] == "bar"
-    else:
-        pytest.fail()
+    assert exc.value.args[0] == "Bad Request"
+
+
+async def test_auth_error(make_api):
+    api = make_api(auth=False)
+    with pytest.raises(AuthError):
+        await api.get_me()

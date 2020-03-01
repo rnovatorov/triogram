@@ -4,7 +4,7 @@ import contextvars
 
 import attr
 
-from .errors import ApiError
+from .errors import ApiError, AuthError
 from .logs import ContextVarAdapter
 
 
@@ -30,7 +30,12 @@ class Api:
             return payload["result"]
 
         logger.error("< %s", payload)
-        raise ApiError(payload["description"])
+        description = payload["description"]
+
+        if response.status_code == 401:
+            raise AuthError(description)
+
+        raise ApiError(description)
 
     def __getattr__(self, method_name):
         async def method(**kwargs):
