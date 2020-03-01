@@ -15,9 +15,6 @@ def configure_logging():
     handler = logging.StreamHandler()
     handler.setLevel(logging.INFO)
 
-    formatter = logging.Formatter("%(request_id)s %(message)s")
-    handler.setFormatter(formatter)
-
     logger.addHandler(handler)
 
 

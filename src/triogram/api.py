@@ -5,11 +5,11 @@ import contextvars
 import attr
 
 from .errors import ApiError, AuthError
-from .logs import ContextVarAdapter
 
 
 request_id = contextvars.ContextVar("request_id")
-logger = ContextVarAdapter(logging.getLogger(__name__), request_id)
+
+logger = logging.getLogger(__name__)
 
 
 @attr.s
@@ -19,17 +19,17 @@ class Api:
     _request_counter = attr.ib(factory=itertools.count)
 
     async def __call__(self, method_name, **kwargs):
-        self._set_request_id()
+        req_id = self._set_request_id()
 
-        logger.info("> %s %s", method_name, kwargs)
+        logger.info("> %d %s %s", req_id, method_name, kwargs)
         response = await self._http.post(method_name, **kwargs)
         payload = response.json()
 
         if payload["ok"]:
-            logger.info("< %s", payload)
+            logger.info("< %d %s", req_id, payload)
             return payload["result"]
 
-        logger.error("< %s", payload)
+        logger.error("< %d %s", req_id, payload)
         description = payload["description"]
 
         if response.status_code == 401:
@@ -44,4 +44,6 @@ class Api:
         return method
 
     def _set_request_id(self):
-        request_id.set(next(self._request_counter))
+        value = next(self._request_counter)
+        request_id.set(value)
+        return value
