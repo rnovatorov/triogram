@@ -22,8 +22,8 @@ test:
 codecov:
 	pipenv run codecov
 
-.PHONY: upload
-upload: dist
+.PHONY: publish
+publish: dist
 	pipenv run twine upload $</*
 
 dist: setup.py
