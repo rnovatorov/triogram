@@ -26,13 +26,9 @@ class Bot:
         async with self._http:
             while True:
                 for update in await self._poller.get_updates():
-                    await self.pub(update)
+                    await self._dispatcher.pub(update)
 
     __call__ = run
-
-    @property
-    def pub(self):
-        return self._dispatcher.pub
 
     @property
     def sub(self):
