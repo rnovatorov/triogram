@@ -19,6 +19,10 @@ class Poller:
     _timeout = attr.ib(default=POLLER_TIMEOUT)
     _retry_interval = attr.ib(default=POLLER_RETRY_INTERVAL)
 
+    @property
+    def offset(self):
+        return self._offset
+
     async def get_updates(self):
         while True:
             try:

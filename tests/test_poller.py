@@ -42,14 +42,14 @@ async def test_api_error(autojump_clock):
     updates = await poller.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "A"
-    assert poller._offset == 1
+    assert poller.offset == 1
 
     start_time = trio.current_time()
 
     updates = await poller.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "B"
-    assert poller._offset == 2
+    assert poller.offset == 2
 
     end_time = trio.current_time()
 
@@ -71,12 +71,12 @@ async def test_timeout():
     updates = await poller.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "A"
-    assert poller._offset == 1
+    assert poller.offset == 1
 
     updates = await poller.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "B"
-    assert poller._offset == 2
+    assert poller.offset == 2
 
 
 async def test_sanity():
@@ -95,19 +95,19 @@ async def test_sanity():
     updates = await poller.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "A"
-    assert poller._offset == 1
+    assert poller.offset == 1
 
     updates = await poller.get_updates()
     assert len(updates) == 2
     assert updates[0]["message"] == "B"
     assert updates[1]["message"] == "B"
-    assert poller._offset == 3
+    assert poller.offset == 3
 
     updates = await poller.get_updates()
     assert len(updates) == 0
-    assert poller._offset == 3
+    assert poller.offset == 3
 
     updates = await poller.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "C"
-    assert poller._offset == 4
+    assert poller.offset == 4
