@@ -4,8 +4,8 @@ import trio
 import triogram
 
 
-def new_message(update):
-    return "message" in update
+def text_message(update):
+    return "message" in update and "text" in update["message"]
 
 
 async def send_file(bot):
@@ -16,7 +16,7 @@ async def send_file(bot):
         If this file contains any sensitive information
         (such as plain-text tokens), it will be sent as is.
     """
-    async with bot.sub(new_message) as updates:
+    async with bot.sub(text_message) as updates:
         async for update in updates:
             with open(__file__) as file:
                 await bot.api.send_document(
