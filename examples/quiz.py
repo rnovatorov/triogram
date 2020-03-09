@@ -44,7 +44,7 @@ class Quiz:
 
     async def wait_answer(self):
         update = await self.bot.wait(
-            lambda u: ("message" in u and u["message"]["from"]["id"] == self.player)
+            lambda u: ("message" in u and u["message"]["chat"]["id"] == self.player)
         )
         return update["message"]["text"]
 
@@ -60,7 +60,7 @@ class Handler:
         async with trio.open_nursery() as nursery:
             async with self.bot.sub(self.predicate) as updates:
                 async for update in updates:
-                    player = update["message"]["from"]["id"]
+                    player = update["message"]["chat"]["id"]
                     await nursery.start(self.quiz, player)
 
     def predicate(self, update):
@@ -69,7 +69,7 @@ class Handler:
 
         return (
             update["message"]["text"].startswith(self.command)
-            and update["message"]["from"]["id"] not in self.players
+            and update["message"]["chat"]["id"] not in self.players
         )
 
     async def quiz(self, player, task_status=trio.TASK_STATUS_IGNORED):
