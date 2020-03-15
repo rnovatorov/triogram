@@ -1,3 +1,4 @@
+import os
 import contextlib
 from unittest import mock
 
@@ -5,11 +6,19 @@ import trio
 
 from triogram.bot import Bot, make_bot
 from triogram.dispatcher import Dispatcher
+from triogram.config import TOKEN_ENV_VAR
 
 
 async def test_make_bot():
     token = "123:ABC"
     bot = make_bot(token)
+    assert bot.api._http.base_url.path == f"/bot{token}/"
+
+
+async def test_make_bot_token_from_env():
+    token = "123:ABC"
+    with mock.patch.dict(os.environ, {TOKEN_ENV_VAR: token}):
+        bot = make_bot()
     assert bot.api._http.base_url.path == f"/bot{token}/"
 
 

@@ -1,16 +1,23 @@
+import os
+
 import attr
 
 from .api import Api
 from .dispatcher import Dispatcher
 from .poller import Poller
 from .http import http_client
+from .config import TOKEN_ENV_VAR
 
 
-def make_bot(token):
+def make_bot(token=None):
+    if token is None:
+        token = os.environ[TOKEN_ENV_VAR]
+
     http = http_client(token=token)
     api = Api(http=http)
     poller = Poller(api=api)
     dispatcher = Dispatcher()
+
     return Bot(http=http, api=api, poller=poller, dispatcher=dispatcher)
 
 
