@@ -16,7 +16,7 @@ black-check:
 
 .PHONY: test
 test:
-	pipenv run pytest --verbose --cov
+	pipenv run pytest --verbose --cov --cov-report term-missing
 
 .PHONY: codecov
 codecov:
