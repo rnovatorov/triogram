@@ -22,7 +22,7 @@ async def test_make_bot_token_from_env():
     assert bot.api._http.base_url.path == f"/bot{token}/"
 
 
-async def test_bot():
+async def test_wait():
     async def get_updates():
         return [42]
 
@@ -35,9 +35,8 @@ async def test_bot():
     async with trio.open_nursery() as nursery:
         nursery.start_soon(bot)
 
-        async def subscriber(**kwargs):
-            async with bot.sub(**kwargs) as updates:
-                assert await updates.receive() == 42
+        async def waiter(**kwargs):
+            assert await bot.wait(**kwargs) == 42
             nursery.cancel_scope.cancel()
 
-        await nursery.start(subscriber)
+        await nursery.start(waiter)
