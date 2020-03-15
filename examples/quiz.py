@@ -1,4 +1,3 @@
-import os
 import random
 import operator
 import contextlib
@@ -91,8 +90,7 @@ async def main():
     """
     Starts the bot and event handlers.
     """
-    token = os.environ["TOKEN"]
-    bot = triogram.make_bot(token)
+    bot = triogram.make_bot()
     handler = Handler(bot)
 
     async with trio.open_nursery() as nursery:
