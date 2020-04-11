@@ -6,8 +6,7 @@ from urllib import parse
 import trio
 import pytest
 
-from triogram.api import Api
-from triogram.http import http_client
+import triogram
 
 
 TOKEN = "123:ABC"
@@ -69,7 +68,7 @@ async def fixture_make_api(httpd):
 
     def make_api(auth=True):
         token = TOKEN if auth else "123:INVALID"
-        http = http_client(token, f"http://{host}:{port}")
-        return Api(http)
+        http = triogram.http_client(token, f"http://{host}:{port}")
+        return triogram.Api(http)
 
     yield make_api

@@ -3,8 +3,7 @@ import httpx
 import pytest
 import trio
 
-from triogram.errors import ApiError, AuthError
-from triogram.poller import Poller
+import triogram
 
 
 @attr.s
@@ -20,10 +19,10 @@ class MockApi:
 
 
 async def test_auth_error():
-    api = MockApi(iter([AuthError()]))
-    poller = Poller(api=api)
+    api = MockApi(iter([triogram.AuthError()]))
+    poller = triogram.Poller(api=api)
 
-    with pytest.raises(AuthError):
+    with pytest.raises(triogram.AuthError):
         await poller.get_updates()
 
 
@@ -32,12 +31,12 @@ async def test_api_error(autojump_clock):
         iter(
             [
                 [{"update_id": 0, "message": "A"}],
-                ApiError(),
+                triogram.ApiError(),
                 [{"update_id": 1, "message": "B"}],
             ]
         )
     )
-    poller = Poller(api=api, retry_interval=2)
+    poller = triogram.Poller(api=api, retry_interval=2)
 
     updates = await poller.get_updates()
     assert len(updates) == 1
@@ -66,7 +65,7 @@ async def test_timeout():
             ]
         )
     )
-    poller = Poller(api=api)
+    poller = triogram.Poller(api=api)
 
     updates = await poller.get_updates()
     assert len(updates) == 1
@@ -90,7 +89,7 @@ async def test_sanity():
             ]
         )
     )
-    poller = Poller(api=api)
+    poller = triogram.Poller(api=api)
 
     updates = await poller.get_updates()
     assert len(updates) == 1

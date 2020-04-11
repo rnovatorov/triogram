@@ -3,7 +3,7 @@ from unittest import mock
 import trio
 import pytest
 
-from triogram.dispatcher import Dispatcher
+import triogram
 
 
 TEST_UPDATE = {"type": "test_type", "object": "test_object"}
@@ -11,7 +11,7 @@ TEST_UPDATE = {"type": "test_type", "object": "test_object"}
 
 @pytest.fixture()
 async def dispatcher():
-    return Dispatcher()
+    return triogram.Dispatcher()
 
 
 async def test_one_subscriber(dispatcher, autojump_clock):
