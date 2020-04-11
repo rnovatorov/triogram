@@ -14,6 +14,13 @@ deps-update:
 black-check:
 	pipenv run black --check .
 
+.PHONY: pyflakes-check
+pyflakes-check:
+	pipenv run pyflakes .
+
+.PHONY: check
+check: black-check pyflakes-check
+
 .PHONY: test
 test:
 	pipenv run pytest --verbose --cov --cov-report term-missing

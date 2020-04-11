@@ -14,7 +14,7 @@ install:
   - make deps-install
 
 before_script:
-  - make black-check
+  - make check
 
 script:
   - make test

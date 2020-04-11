@@ -8,6 +8,7 @@ triogram = {editable = true, path = "."}
 
 [dev-packages]
 black = "*"
+pyflakes = "*"
 pytest = "*"
 pytest-trio = "*"
 pytest-cov = "*"
