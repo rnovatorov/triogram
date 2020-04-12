@@ -31,7 +31,7 @@ class Poller:
                 raise
             except ApiError as exc:
                 logger.error(
-                    "get updates error, will retry after %d: %s",
+                    "get updates error, will retry after %.1f seconds: %s",
                     self._retry_interval,
                     exc,
                 )
