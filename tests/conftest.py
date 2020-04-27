@@ -68,7 +68,7 @@ async def fixture_make_api(httpd):
 
     def make_api(auth=True):
         token = TOKEN if auth else "123:INVALID"
-        http = triogram.http_client(token, f"http://{host}:{port}")
+        http = triogram.make_http(token, f"http://{host}:{port}")
         return triogram.Api(http)
 
     yield make_api

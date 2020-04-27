@@ -5,7 +5,7 @@ from .bot import make_bot, Bot
 from .config import TOKEN_ENV_VAR
 from .dispatcher import Dispatcher
 from .errors import ApiError, AuthError
-from .http import http_client
+from .http import make_http
 from .poller import Poller
 
 __all__ = [
@@ -16,7 +16,7 @@ __all__ = [
     "Dispatcher",
     "ApiError",
     "AuthError",
-    "http_client",
+    "make_http",
     "Poller",
 ]
 
