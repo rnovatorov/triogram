@@ -17,25 +17,16 @@ def configure_logging():
     logger.addHandler(handler)
 
 
-async def get_me(bot):
+async def main():
     """
     Gets info about the bot every 5 seconds.
     """
-    while True:
-        await bot.api.get_me()
-        await trio.sleep(5)
-
-
-async def main():
-    """
-    Starts the bot and event handlers.
-    """
     configure_logging()
-    bot = triogram.make_bot()
 
-    async with bot, trio.open_nursery() as nursery:
-        nursery.start_soon(bot)
-        nursery.start_soon(get_me, bot)
+    async with triogram.make_bot() as bot:
+        while True:
+            await bot.api.get_me()
+            await trio.sleep(5)
 
 
 if __name__ == "__main__":
