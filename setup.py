@@ -10,5 +10,5 @@ setup(
     url="https://github.com/rnovatorov/triogram",
     author="Roman Novatorov",
     author_email="roman.novatorov@gmail.com",
-    install_requires=["attrs", "httpx==0.11.*", "trio==0.13.*", "async_generator"],
+    install_requires=["attrs", "httpx==0.11.*", "trio==0.14.*", "async_generator"],
 )
