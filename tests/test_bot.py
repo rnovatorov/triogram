@@ -1,5 +1,4 @@
 import os
-import contextlib
 from unittest import mock
 
 import trio
