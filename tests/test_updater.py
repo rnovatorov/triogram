@@ -18,16 +18,16 @@ class MockApi:
         return u
 
 
-def make_poller(api):
-    return triogram.Poller(api=api, timeout=25.0, retry_interval=1.0)
+def make_updater(api):
+    return triogram.Updater(api=api, timeout=25.0, retry_interval=1.0)
 
 
 async def test_auth_error():
     api = MockApi(iter([triogram.AuthError()]))
-    poller = make_poller(api)
+    updater = make_updater(api)
 
     with pytest.raises(triogram.AuthError):
-        await poller.get_updates()
+        await updater.get_updates()
 
 
 async def test_api_error(autojump_clock):
@@ -40,19 +40,19 @@ async def test_api_error(autojump_clock):
             ]
         )
     )
-    poller = make_poller(api)
+    updater = make_updater(api)
 
-    updates = await poller.get_updates()
+    updates = await updater.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "A"
-    assert poller.offset == 1
+    assert updater.offset == 1
 
     start_time = trio.current_time()
 
-    updates = await poller.get_updates()
+    updates = await updater.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "B"
-    assert poller.offset == 2
+    assert updater.offset == 2
 
     end_time = trio.current_time()
 
@@ -69,17 +69,17 @@ async def test_timeout():
             ]
         )
     )
-    poller = make_poller(api)
+    updater = make_updater(api)
 
-    updates = await poller.get_updates()
+    updates = await updater.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "A"
-    assert poller.offset == 1
+    assert updater.offset == 1
 
-    updates = await poller.get_updates()
+    updates = await updater.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "B"
-    assert poller.offset == 2
+    assert updater.offset == 2
 
 
 async def test_sanity():
@@ -93,24 +93,24 @@ async def test_sanity():
             ]
         )
     )
-    poller = make_poller(api)
+    updater = make_updater(api)
 
-    updates = await poller.get_updates()
+    updates = await updater.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "A"
-    assert poller.offset == 1
+    assert updater.offset == 1
 
-    updates = await poller.get_updates()
+    updates = await updater.get_updates()
     assert len(updates) == 2
     assert updates[0]["message"] == "B"
     assert updates[1]["message"] == "B"
-    assert poller.offset == 3
+    assert updater.offset == 3
 
-    updates = await poller.get_updates()
+    updates = await updater.get_updates()
     assert len(updates) == 0
-    assert poller.offset == 3
+    assert updater.offset == 3
 
-    updates = await poller.get_updates()
+    updates = await updater.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "C"
-    assert poller.offset == 4
+    assert updater.offset == 4

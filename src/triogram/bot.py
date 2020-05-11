@@ -4,7 +4,7 @@ import attr
 
 from .api import Api
 from .dispatcher import Dispatcher
-from .poller import Poller
+from .updater import Updater
 from .http import make_http
 
 
@@ -13,8 +13,8 @@ def make_bot(
     token_env_var="TRIOGRAM_TOKEN",
     telegram_api_url="https://api.telegram.org",
     http_timeout=50.0,
-    poller_timeout=25.0,
-    poller_retry_interval=1.0,
+    updater_timeout=25.0,
+    updater_retry_interval=1.0,
 ):
     if token is None:
         token = os.environ[token_env_var]
@@ -23,12 +23,12 @@ def make_bot(
         token=token, telegram_api_url=telegram_api_url, http_timeout=http_timeout
     )
     api = Api(http=http)
-    poller = Poller(
-        api=api, timeout=poller_timeout, retry_interval=poller_retry_interval
+    updater = Updater(
+        api=api, timeout=updater_timeout, retry_interval=updater_retry_interval
     )
     dispatcher = Dispatcher()
 
-    return Bot(http=http, api=api, poller=poller, dispatcher=dispatcher)
+    return Bot(http=http, api=api, updater=updater, dispatcher=dispatcher)
 
 
 @attr.s
@@ -36,12 +36,12 @@ class Bot:
 
     _http = attr.ib()
     api = attr.ib()
-    _poller = attr.ib()
+    _updater = attr.ib()
     _dispatcher = attr.ib()
 
     async def run(self):
         while True:
-            for update in await self._poller.get_updates():
+            for update in await self._updater.get_updates():
                 await self._dispatcher.pub(update)
 
     __call__ = run

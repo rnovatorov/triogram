@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 @attr.s
-class Poller:
+class Updater:
 
     _api = attr.ib()
     _timeout = attr.ib()

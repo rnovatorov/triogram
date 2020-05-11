@@ -5,7 +5,7 @@ from .bot import make_bot, Bot
 from .dispatcher import Dispatcher
 from .errors import ApiError, AuthError
 from .http import make_http
-from .poller import Poller
+from .updater import Updater
 
 __all__ = [
     "Api",
@@ -15,7 +15,7 @@ __all__ = [
     "ApiError",
     "AuthError",
     "make_http",
-    "Poller",
+    "Updater",
 ]
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
