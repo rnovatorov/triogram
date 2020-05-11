@@ -4,7 +4,6 @@ import attr
 import httpx
 import trio
 
-from .config import POLLER_RETRY_INTERVAL, POLLER_TIMEOUT
 from .errors import ApiError, AuthError
 
 
@@ -15,9 +14,9 @@ logger = logging.getLogger(__name__)
 class Poller:
 
     _api = attr.ib()
+    _timeout = attr.ib()
+    _retry_interval = attr.ib()
     _offset = attr.ib(default=None)
-    _timeout = attr.ib(default=POLLER_TIMEOUT)
-    _retry_interval = attr.ib(default=POLLER_RETRY_INTERVAL)
 
     @property
     def offset(self):

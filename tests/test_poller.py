@@ -18,9 +18,13 @@ class MockApi:
         return u
 
 
+def make_poller(api):
+    return triogram.Poller(api=api, timeout=25.0, retry_interval=1.0)
+
+
 async def test_auth_error():
     api = MockApi(iter([triogram.AuthError()]))
-    poller = triogram.Poller(api=api)
+    poller = make_poller(api)
 
     with pytest.raises(triogram.AuthError):
         await poller.get_updates()
@@ -36,7 +40,7 @@ async def test_api_error(autojump_clock):
             ]
         )
     )
-    poller = triogram.Poller(api=api, retry_interval=2)
+    poller = make_poller(api)
 
     updates = await poller.get_updates()
     assert len(updates) == 1
@@ -52,7 +56,7 @@ async def test_api_error(autojump_clock):
 
     end_time = trio.current_time()
 
-    assert 1 < end_time - start_time < 3
+    assert 0 < end_time - start_time < 2
 
 
 async def test_timeout():
@@ -65,7 +69,7 @@ async def test_timeout():
             ]
         )
     )
-    poller = triogram.Poller(api=api)
+    poller = make_poller(api)
 
     updates = await poller.get_updates()
     assert len(updates) == 1
@@ -89,7 +93,7 @@ async def test_sanity():
             ]
         )
     )
-    poller = triogram.Poller(api=api)
+    poller = make_poller(api)
 
     updates = await poller.get_updates()
     assert len(updates) == 1

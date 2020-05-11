@@ -15,8 +15,8 @@ async def test_make_bot():
 
 async def test_make_bot_token_from_env():
     token = "123:ABC"
-    with mock.patch.dict(os.environ, {triogram.TOKEN_ENV_VAR: token}):
-        bot = triogram.make_bot()
+    with mock.patch.dict(os.environ, {"TOKEN": token}):
+        bot = triogram.make_bot(token_env_var="TOKEN")
     assert bot.api._http.base_url.path == f"/bot{token}/"
 
 

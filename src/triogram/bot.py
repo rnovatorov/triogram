@@ -6,16 +6,26 @@ from .api import Api
 from .dispatcher import Dispatcher
 from .poller import Poller
 from .http import make_http
-from .config import TOKEN_ENV_VAR
 
 
-def make_bot(token=None):
+def make_bot(
+    token=None,
+    token_env_var="TRIOGRAM_TOKEN",
+    telegram_api_url="https://api.telegram.org",
+    http_timeout=50.0,
+    poller_timeout=25.0,
+    poller_retry_interval=1.0,
+):
     if token is None:
-        token = os.environ[TOKEN_ENV_VAR]
+        token = os.environ[token_env_var]
 
-    http = make_http(token=token)
+    http = make_http(
+        token=token, telegram_api_url=telegram_api_url, http_timeout=http_timeout
+    )
     api = Api(http=http)
-    poller = Poller(api=api)
+    poller = Poller(
+        api=api, timeout=poller_timeout, retry_interval=poller_retry_interval
+    )
     dispatcher = Dispatcher()
 
     return Bot(http=http, api=api, poller=poller, dispatcher=dispatcher)
