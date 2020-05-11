@@ -32,8 +32,8 @@ async def test_wait():
 
     updater = mock.Mock(get_updates=get_updates)
 
-    dispatcher = triogram.Dispatcher()
-    bot = triogram.Bot(http=http, api=api, updater=updater, dispatcher=dispatcher)
+    fanout = triogram.Fanout()
+    bot = triogram.Bot(http=http, api=api, updater=updater, fanout=fanout)
 
     async with bot, trio.open_nursery() as nursery:
         nursery.start_soon(bot)

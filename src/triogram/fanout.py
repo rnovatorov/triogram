@@ -5,7 +5,7 @@ import trio
 
 
 @attr.s
-class Dispatcher:
+class Fanout:
 
     _lock = attr.ib(factory=trio.Lock)
     _send_channels = attr.ib(factory=dict)

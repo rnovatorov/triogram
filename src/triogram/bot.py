@@ -3,7 +3,7 @@ import os
 import attr
 
 from .api import Api
-from .dispatcher import Dispatcher
+from .fanout import Fanout
 from .updater import Updater
 from .http import make_http
 
@@ -26,9 +26,9 @@ def make_bot(
     updater = Updater(
         api=api, timeout=updater_timeout, retry_interval=updater_retry_interval
     )
-    dispatcher = Dispatcher()
+    fanout = Fanout()
 
-    return Bot(http=http, api=api, updater=updater, dispatcher=dispatcher)
+    return Bot(http=http, api=api, updater=updater, fanout=fanout)
 
 
 @attr.s
@@ -37,18 +37,18 @@ class Bot:
     _http = attr.ib()
     api = attr.ib()
     _updater = attr.ib()
-    _dispatcher = attr.ib()
+    _fanout = attr.ib()
 
     async def run(self):
         while True:
             for update in await self._updater.get_updates():
-                await self._dispatcher.pub(update)
+                await self._fanout.pub(update)
 
     __call__ = run
 
     @property
     def sub(self):
-        return self._dispatcher.sub
+        return self._fanout.sub
 
     async def wait(self, *args, **kwargs):
         async with self.sub(*args, **kwargs) as updates:
