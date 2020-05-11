@@ -33,7 +33,7 @@ async def main():
     configure_logging()
     bot = triogram.make_bot()
 
-    async with trio.open_nursery() as nursery:
+    async with bot, trio.open_nursery() as nursery:
         nursery.start_soon(bot)
         nursery.start_soon(get_me, bot)
 

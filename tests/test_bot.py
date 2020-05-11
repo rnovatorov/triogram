@@ -21,16 +21,21 @@ async def test_make_bot_token_from_env():
 
 
 async def test_wait():
+    async def aclose():
+        pass
+
+    http = mock.Mock(aclose=aclose)
+    api = None
+
     async def get_updates():
         return [42]
 
-    http = contextlib.AsyncExitStack()
-    api = None
     poller = mock.Mock(get_updates=get_updates)
+
     dispatcher = triogram.Dispatcher()
     bot = triogram.Bot(http=http, api=api, poller=poller, dispatcher=dispatcher)
 
-    async with trio.open_nursery() as nursery:
+    async with bot, trio.open_nursery() as nursery:
         nursery.start_soon(bot)
 
         async def waiter(**kwargs):

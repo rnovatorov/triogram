@@ -30,10 +30,9 @@ class Bot:
     _dispatcher = attr.ib()
 
     async def run(self):
-        async with self._http:
-            while True:
-                for update in await self._poller.get_updates():
-                    await self._dispatcher.pub(update)
+        while True:
+            for update in await self._poller.get_updates():
+                await self._dispatcher.pub(update)
 
     __call__ = run
 
@@ -44,3 +43,12 @@ class Bot:
     async def wait(self, *args, **kwargs):
         async with self.sub(*args, **kwargs) as updates:
             return await updates.receive()
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *exc):
+        await self.aclose()
+
+    async def aclose(self):
+        await self._http.aclose()

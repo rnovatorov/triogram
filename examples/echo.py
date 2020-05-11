@@ -38,8 +38,7 @@ async def main():
     Starts the bot and event handlers.
     """
     bot = triogram.make_bot()
-
-    async with trio.open_nursery() as nursery:
+    async with bot, trio.open_nursery() as nursery:
         nursery.start_soon(bot)
         nursery.start_soon(echo, bot)
         nursery.start_soon(echo_once, bot)
