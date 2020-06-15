@@ -1,30 +1,25 @@
-import os
-
 import attr
 
 from .api import Api
+from .config import Config
 from .fanout import Fanout
 from .updater import Updater
 from .http import make_http
 
 
-def make_bot(
-    token=None,
-    token_env_var="TRIOGRAM_TOKEN",
-    telegram_api_url="https://api.telegram.org",
-    http_timeout=50.0,
-    updater_timeout=25.0,
-    updater_retry_interval=1.0,
-):
-    if token is None:
-        token = os.environ[token_env_var]
+def make_bot(*args, **kwargs):
+    config = Config(*args, **kwargs)
 
     http = make_http(
-        token=token, telegram_api_url=telegram_api_url, http_timeout=http_timeout
+        token=config.get_token(),
+        telegram_api_url=config.telegram_api_url,
+        http_timeout=config.http_timeout,
     )
     api = Api(http=http)
     updater = Updater(
-        api=api, timeout=updater_timeout, retry_interval=updater_retry_interval
+        api=api,
+        timeout=config.updater_timeout,
+        retry_interval=config.updater_retry_interval,
     )
     fanout = Fanout()
 
