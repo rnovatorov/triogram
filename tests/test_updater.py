@@ -63,8 +63,10 @@ async def test_timeout():
     api = MockApi(
         iter(
             [
+                httpx.ConnectTimeout(),
                 [{"update_id": 0, "message": "A"}],
-                httpx.TimeoutException(),
+                httpx.ReadTimeout(),
+                httpx.WriteTimeout(),
                 [{"update_id": 1, "message": "B"}],
             ]
         )

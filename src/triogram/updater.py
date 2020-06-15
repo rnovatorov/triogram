@@ -35,7 +35,7 @@ class Updater:
                     exc,
                 )
                 await trio.sleep(self._retry_interval)
-            except httpx.TimeoutException as exc:
+            except timeout_exceptions as exc:
                 logger.warning("get updates timeout, will retry asap: %s", exc)
 
     async def _get_updates(self):
@@ -45,3 +45,6 @@ class Updater:
         if updates:
             self._offset = updates[-1]["update_id"] + 1
         return updates
+
+
+timeout_exceptions = (httpx.ConnectTimeout, httpx.ReadTimeout, httpx.WriteTimeout)
