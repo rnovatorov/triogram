@@ -18,8 +18,8 @@ class MockApi:
         return u
 
 
-def make_updater(api):
-    return triogram.Updater(api=api, timeout=25.0, retry_interval=1.0)
+def make_updater(api, retry_interval=1.0):
+    return triogram.Updater(api=api, timeout=25.0, retry_interval=retry_interval)
 
 
 async def test_auth_error():
@@ -30,33 +30,35 @@ async def test_auth_error():
         await updater.get_updates()
 
 
-async def test_api_error(autojump_clock):
+async def test_retry_on_error(autojump_clock):
     api = MockApi(
         iter(
             [
+                httpx.NetworkError(),
                 [{"update_id": 0, "message": "A"}],
                 triogram.ApiError(),
                 [{"update_id": 1, "message": "B"}],
             ]
         )
     )
-    updater = make_updater(api)
+    retry_interval = 1.0
+    updater = make_updater(api, retry_interval=retry_interval)
 
+    start_time = trio.current_time()
     updates = await updater.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "A"
     assert updater.offset == 1
+    end_time = trio.current_time()
+    assert end_time - start_time == pytest.approx(retry_interval)
 
     start_time = trio.current_time()
-
     updates = await updater.get_updates()
     assert len(updates) == 1
     assert updates[0]["message"] == "B"
     assert updater.offset == 2
-
     end_time = trio.current_time()
-
-    assert 0 < end_time - start_time < 2
+    assert end_time - start_time == pytest.approx(retry_interval)
 
 
 async def test_timeout():

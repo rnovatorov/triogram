@@ -28,7 +28,7 @@ class Updater:
                 return await self._get_updates()
             except AuthError:
                 raise
-            except ApiError as exc:
+            except (httpx.NetworkError, ApiError) as exc:
                 logger.error(
                     "get updates error, will retry after %.1f seconds: %s",
                     self._retry_interval,
