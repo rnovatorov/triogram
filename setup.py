@@ -10,5 +10,5 @@ setuptools.setup(
     url="https://github.com/rnovatorov/triogram",
     author="Roman Novatorov",
     author_email="roman.novatorov@gmail.com",
-    install_requires=["attrs", "httpx==0.12.*", "trio==0.14.*"],
+    install_requires=["attrs", "httpx==0.12.*", "trio==0.16.*"],
 )
