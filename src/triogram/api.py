@@ -7,9 +7,9 @@ import attr
 from .errors import ApiError, AuthError
 
 
-request_id = contextvars.ContextVar("request_id")
+REQUEST_ID = contextvars.ContextVar("request_id")
 
-logger = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 @attr.s
@@ -21,15 +21,15 @@ class Api:
     async def __call__(self, method_name, **kwargs):
         req_id = self._set_request_id()
 
-        logger.info("> %d %s %s", req_id, method_name, kwargs)
+        LOG.info("> %d %s %s", req_id, method_name, kwargs)
         response = await self._http.post(method_name, **kwargs)
         payload = response.json()
 
         if payload["ok"]:
-            logger.info("< %d %s", req_id, payload)
+            LOG.info("< %d %s", req_id, payload)
             return payload["result"]
 
-        logger.error("< %d %s", req_id, payload)
+        LOG.error("< %d %s", req_id, payload)
         description = payload["description"]
 
         if response.status_code == 401:
@@ -45,5 +45,5 @@ class Api:
 
     def _set_request_id(self):
         value = next(self._request_counter)
-        request_id.set(value)
+        REQUEST_ID.set(value)
         return value
