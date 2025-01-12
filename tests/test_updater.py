@@ -2,7 +2,6 @@ import attr
 import httpx
 import pytest
 import trio
-
 import triogram
 
 
@@ -34,7 +33,7 @@ async def test_retry_on_error(autojump_clock):
     api = MockApi(
         iter(
             [
-                httpx.NetworkError(),
+                httpx.NetworkError("network error occurred"),
                 [{"update_id": 0, "message": "A"}],
                 triogram.ApiError(),
                 [{"update_id": 1, "message": "B"}],
@@ -65,10 +64,10 @@ async def test_timeout():
     api = MockApi(
         iter(
             [
-                httpx.ConnectTimeout(),
+                httpx.ConnectTimeout("connection timed out"),
                 [{"update_id": 0, "message": "A"}],
-                httpx.ReadTimeout(),
-                httpx.WriteTimeout(),
+                httpx.ReadTimeout("read timed out"),
+                httpx.WriteTimeout("write timed out"),
                 [{"update_id": 1, "message": "B"}],
             ]
         )

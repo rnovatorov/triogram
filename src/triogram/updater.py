@@ -6,7 +6,6 @@ import trio
 
 from .errors import ApiError, AuthError
 
-
 logger = logging.getLogger(__name__)
 
 

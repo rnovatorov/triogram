@@ -1,6 +1,6 @@
-import random
-import operator
 import contextlib
+import operator
+import random
 
 import attr
 import trio
@@ -18,7 +18,7 @@ class Quiz:
     async def __call__(self):
         score = 0
 
-        for (question, correct_answer) in self.generate_questions():
+        for question, correct_answer in self.generate_questions():
             await self.send(question)
 
             if await self.wait_answer() == correct_answer:

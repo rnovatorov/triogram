@@ -1,13 +1,11 @@
-import json
 import functools
+import json
 from http import server
 from urllib import parse
 
-import trio
 import pytest
-
+import trio
 import triogram
-
 
 TOKEN = "123:ABC"
 
@@ -55,7 +53,7 @@ async def fixture_httpd(nursery, scope="session"):
     httpd = Server(("", 0), Handler)
     nursery.start_soon(
         functools.partial(
-            trio.to_thread.run_sync, httpd.serve_forever, cancellable=True
+            trio.to_thread.run_sync, httpd.serve_forever, abandon_on_cancel=True
         )
     )
     await httpd.ready.wait()

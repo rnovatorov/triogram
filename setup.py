@@ -1,6 +1,5 @@
 import setuptools
 
-
 setuptools.setup(
     name="triogram",
     version="0.5.0",
@@ -10,5 +9,5 @@ setuptools.setup(
     url="https://github.com/rnovatorov/triogram",
     author="Roman Novatorov",
     author_email="roman.novatorov@gmail.com",
-    install_requires=["attrs", "httpx==0.13.*", "trio==0.16.*"],
+    install_requires=["attrs", "httpx==0.28.*", "trio==0.28.*"],
 )

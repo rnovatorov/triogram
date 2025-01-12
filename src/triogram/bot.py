@@ -3,8 +3,8 @@ import attr
 from .api import Api
 from .config import Config
 from .fanout import Fanout
-from .updater import Updater
 from .http import make_http
+from .updater import Updater
 
 
 def make_bot(*args, **kwargs):

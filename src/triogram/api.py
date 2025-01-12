@@ -1,11 +1,10 @@
-import logging
-import itertools
 import contextvars
+import itertools
+import logging
 
 import attr
 
 from .errors import ApiError, AuthError
-
 
 REQUEST_ID = contextvars.ContextVar("request_id")
 

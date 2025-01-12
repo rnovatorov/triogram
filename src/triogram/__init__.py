@@ -1,10 +1,10 @@
 import logging
 
 from .api import Api
-from .bot import make_bot, Bot
+from .bot import Bot, make_bot
 from .config import Config
-from .fanout import Fanout
 from .errors import ApiError, AuthError
+from .fanout import Fanout
 from .http import make_http
 from .updater import Updater
 

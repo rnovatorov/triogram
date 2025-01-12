@@ -1,10 +1,8 @@
 from unittest import mock
 
-import trio
 import pytest
-
+import trio
 import triogram
-
 
 TEST_UPDATE = {"type": "test_type", "object": "test_object"}
 
