@@ -14,6 +14,8 @@ pytest-trio = "*"
 pytest-cov = "*"
 codecov = "*"
 twine = "*"
+setuptools = "*"
+requests = "*"
 
 [pipenv]
 allow_prereleases = true
